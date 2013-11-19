@@ -3,8 +3,22 @@ var express = require('express'),
 	User = require('./api/models/user'),
 	app = express();
 
+function find(collec, query, callback) {
+	mongoose.connection.db.collection(collec, function(err, collection) {
+		collection.find(query).toArray(callback);
+	});
+}
+
 app.get('/', function(req, res) {
 	res.send("woot!");
+});
+
+app.get('/user/:name', function(req, res) {
+	find("users", {
+		name: req.query.name
+	}, function(data) {
+		req.send(data);
+	});
 });
 
 app.get('/api/user/create', function(req, res) {

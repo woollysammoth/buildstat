@@ -23,6 +23,8 @@ var userSchema = new Schema({
 		type: String,
 		required: true
 	}
+}, {
+	collection: 'users'
 });
 
 var hash = function(passwd, salt) {
