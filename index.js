@@ -1,4 +1,5 @@
 var express = require('express'),
+	mongoose = require("mongoose"),
 	app = express.createServer();
 
 app.get('/', function(req, res) {
