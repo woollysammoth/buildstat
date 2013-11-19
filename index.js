@@ -1,7 +1,7 @@
 var express = require('express'),
 	mongoose = require("mongoose"),
-	User = require('./api/models/user'),
-	app = express.createServer();
+	User = require('./api/models/user.js'),
+	app = express();
 
 app.get('/', function(req, res) {
 	res.send("woot!");
