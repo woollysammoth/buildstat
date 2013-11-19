@@ -1,5 +1,6 @@
 var express = require('express'),
 	mongoose = require("mongoose"),
+	User = require('./api/models/user'),
 	app = express.createServer();
 
 app.get('/', function(req, res) {
