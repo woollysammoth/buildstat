@@ -3,6 +3,8 @@ var express = require('express'),
 	User = require('./api/models/user'),
 	app = express();
 
+mongoose.connect('mongodb://localhost/buildstat');
+
 function find(collec, query, callback) {
 	mongoose.connection.db.collection(collec, function(err, collection) {
 		collection.find(query).toArray(callback);
