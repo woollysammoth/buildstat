@@ -1,25 +1,59 @@
 var express = require('express'),
-	mongoose = require("mongoose"),
+	mongo = require("mongoose"),
 	User = require('./api/models/user'),
+	Stat = require('./api/models/stat'),
 	app = express();
 
-mongoose.connect('mongodb://localhost/buildstat');
+mongo.connect("mongodb://localhost/buildstat");
 
 function find(collec, query, callback) {
-	mongoose.connection.db.collection(collec, function(err, collection) {
-		collection.find(query).toArray(callback);
-	});
+	mongo.db[collec].find(query).toArray(callback);
 }
 
 app.get('/', function(req, res) {
 	res.send("woot!");
 });
 
-app.get('/user/:name', function(req, res) {
-	find("users", {
-		name: req.query.name
-	}, function(data) {
-		req.send(data);
+app.get('/user/:username', function(req, res) {
+	console.log(User);
+	User.findOne({
+		name: req.params.username
+	}, function(err, user) {
+		if (!err) {
+			res.json(200, user);
+		} else {
+			res.json(500, {
+				message: err
+			});
+		}
+	});
+});
+
+app.get('/projects/:project/stat', function() {
+	var stat = new Stat({
+		projectName: "buildstat"
+	});
+
+	stat.save(function(err, result) {
+		if (err) throw err;
+
+		res.json({
+			data: result
+		});
+	});
+});
+
+app.get('/projects/:project/stats', function(req, res) {
+	Stat.find({
+		project: req.params.project
+	}, function(err, stats) {
+		if (!err) {
+			res.json(200, stats);
+		} else {
+			res.json(500, {
+				message: err
+			});
+		}
 	});
 });
 
@@ -31,12 +65,12 @@ app.get('/api/user/create', function(req, res) {
 
 	user.setPassword('test');
 
-	res.json({
-		data: user
-	});
-
 	user.save(function(err, result) {
 		if (err) throw err;
+
+		res.json({
+			data: result
+		});
 	});
 });
 
